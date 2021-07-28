@@ -1,11 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGripLines } from '@fortawesome/free-solid-svg-icons'
+import { faDragon, faGripLines } from '@fortawesome/free-solid-svg-icons'
 import { faCat, faKiwiBird } from '@fortawesome/free-solid-svg-icons'
 
 export default function Card({ card }) {
+
   const icons = {
     "cat": faCat,
-    "kiwi": faKiwiBird
+    "kiwi": faKiwiBird,
+    "dragon": faDragon
   }
 
   return (

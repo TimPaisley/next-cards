@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import Layout from '../components/layout'
 import Header from '../components/header'
-import Deck from '../components/deck'
 import Row from '../components/row'
 
 export default function Home() {
@@ -15,7 +14,13 @@ export default function Home() {
     "number": 1,
   }
 
-  const deck = Array.from({ length: 20}, () => kiwi)
+  const dragon = {
+    "name": "dragon",
+    "number": 3,
+  }
+
+  const enemies = Array.from({ length: 2}, () => dragon)
+  const deck = Array.from({ length: 4}, () => kiwi)
   const hand = Array.from({ length: 4}, () => cat)
 
   return (
@@ -28,8 +33,19 @@ export default function Home() {
       <Header />
 
       <section className="flex flex-col h-full py-4 overflow-hidden">
-        <div className="flex flex-col justify-end flex-grow mx-4 overflow-hidden">
-          <Deck deck={deck} />
+        <div className="mx-4 flex-grow">
+          <Row cards={enemies} />
+        </div>
+
+        <div className="p-4 flex space-x-4 justify-center items-center">
+          <div className="w-3 h-3 bg-black rounded-full"></div>
+          <div className="w-3 h-3 border border-black rounded-full"></div>
+          <div className="w-3 h-3 border border-black rounded-full"></div>
+          <div className="w-3 h-3 border border-red-500 rounded-full"></div>
+        </div>
+
+        <div className="">
+          <Row cards={deck} />
         </div>
 
         <div className="mx-4 border-t border-gray-500 pt-4 mt-2">
