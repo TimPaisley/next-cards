@@ -10,7 +10,7 @@ export default function Card({ card }) {
   }
 
   return (
-    <div className="flex w-20 h-28 border border-gray-500 p-1 rounded">
+    <div className="flex w-20 h-28 border border-gray-500 bg-white p-1 rounded">
       <div className="flex flex-col justify-start items-center text-center">
         <div className="text-xl font-bold">{card.number}</div>
         <div className="w-2">
@@ -20,7 +20,7 @@ export default function Card({ card }) {
 
       <div className="flex flex-col flex-grow justify-center items-center">
         <div className="w-8">
-          <FontAwesomeIcon icon={icons[card.name]} />
+          <FontAwesomeIcon icon={icons[card.type]} />
         </div>
       </div>
 
