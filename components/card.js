@@ -2,7 +2,8 @@ import { faDragon, faGripLines } from '@fortawesome/free-solid-svg-icons'
 import { faCat, faKiwiBird } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-export default function Card({ card }) {
+export default function Card(props) {
+  const card = props.card
   const icons = {
     cat: faCat,
     kiwi: faKiwiBird,
@@ -10,7 +11,7 @@ export default function Card({ card }) {
   }
 
   return (
-    <div className="flex w-20 h-28 border border-gray-500 bg-white p-1 rounded">
+    <div className="flex w-20 h-28 border border-gray-500 bg-white p-1 m-1 rounded" {...props}>
       <div className="flex flex-col justify-start items-center text-center">
         <div className="text-xl font-bold">{card.number}</div>
         <div className="w-2">

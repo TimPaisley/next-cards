@@ -1,8 +1,7 @@
 import Head from 'next/head'
-import { useState } from 'react'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { useEffect, useState } from 'react'
+import { DragDropContext } from 'react-beautiful-dnd'
 
-import Card from '../components/card'
 import Header from '../components/header'
 import Layout from '../components/layout'
 import Row from '../components/row'
@@ -46,22 +45,22 @@ export default function Home() {
 
   const initialHand = [
     {
-      id: 'card-1',
+      id: 'hand-1',
       type: 'kiwi',
       number: 1
     },
     {
-      id: 'card-2',
+      id: 'hand-2',
       type: 'cat',
       number: 5
     },
     {
-      id: 'card-3',
+      id: 'hand-3',
       type: 'cat',
       number: 8
     },
     {
-      id: 'card-4',
+      id: 'hand-4',
       type: 'kiwi',
       number: 3
     }
@@ -70,6 +69,25 @@ export default function Home() {
   const [enemies, setEnemies] = useState(initialEnemies)
   const [deck, setDeck] = useState(initialDeck)
   const [hand, setHand] = useState(initialHand)
+  const [winReady, setWinReady] = useState(false)
+
+  useEffect(() => {
+    setWinReady(true)
+  }, [])
+
+  const addToHand = (source, destination, droppableSource, droppableDestination) => {
+    const sourceClone = Array.from(source)
+    const destClone = Array.from(destination)
+    const [removed] = sourceClone.splice(droppableSource.index, 1)
+
+    destClone.splice(droppableDestination.index, 0, removed)
+
+    const result = {}
+    result[droppableSource.droppableId] = sourceClone
+    result[droppableDestination.droppableId] = destClone
+
+    return result
+  }
 
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list)
@@ -80,13 +98,27 @@ export default function Home() {
   }
 
   const onDragEnd = (result) => {
-    if (!result.destination) {
+    const { source, destination } = result
+
+    if (!destination) {
       return
     }
 
-    const newHand = reorder(hand, result.source.index, result.destination.index)
-
-    setHand(newHand)
+    if (source.droppableId == destination.droppableId) {
+      if (source.droppableId === 'deck') {
+        const newDeck = reorder(deck, source.index, destination.index)
+        setDeck(newDeck)
+      } else if (source.droppableId === 'hand') {
+        const newHand = reorder(hand, source.index, destination.index)
+        setHand(newHand)
+      }
+    } else if (source.droppableId === 'deck' && destination.droppableId === 'hand') {
+      const result = addToHand(deck, hand, source, destination)
+      setHand(result.hand)
+      setDeck(result.deck)
+    } else {
+      return
+    }
   }
 
   return (
@@ -98,50 +130,28 @@ export default function Home() {
 
       <Header />
 
-      <DragDropContext onDragEnd={onDragEnd}>
-        <section className="flex flex-col h-full py-4 overflow-hidden">
-          <div className="mx-4 flex-grow">
-            <Row cards={enemies} />
-          </div>
+      {winReady && (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <section className="flex flex-col h-full py-4 overflow-hidden">
+            <div className="mx-4 flex-grow"></div>
 
-          <div className="p-4 flex space-x-4 justify-center items-center">
-            <div className="w-3 h-3 bg-black rounded-full"></div>
-            <div className="w-3 h-3 border border-black rounded-full"></div>
-            <div className="w-3 h-3 border border-black rounded-full"></div>
-            <div className="w-3 h-3 border border-red-500 rounded-full"></div>
-          </div>
+            <div className="p-4 flex space-x-4 justify-center items-center">
+              <div className="w-3 h-3 bg-black rounded-full"></div>
+              <div className="w-3 h-3 border border-black rounded-full"></div>
+              <div className="w-3 h-3 border border-black rounded-full"></div>
+              <div className="w-3 h-3 border border-red-500 rounded-full"></div>
+            </div>
 
-          <div className="">
-            <Row cards={deck} />
-          </div>
+            <div className="mx-4">
+              <Row droppableId="deck" cards={deck} />
+            </div>
 
-          <div className="mx-4 border-t border-gray-500 pt-4 mt-2">
-            <Droppable droppableId="droppable" direction="horizontal">
-              {(provided, snapshot) => (
-                <div
-                  className="flex justify-center space-x-2 mb-2"
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}>
-                  {hand.map((card, i) => (
-                    <Draggable key={card.id} draggableId={card.id} index={i}>
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          card={card}>
-                          <Card card={card} />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </div>
-        </section>
-      </DragDropContext>
+            <div className="mx-4 border-t border-gray-500 pt-4 mt-2">
+              <Row droppableId="hand" cards={hand} />
+            </div>
+          </section>
+        </DragDropContext>
+      )}
     </Layout>
   )
 }
