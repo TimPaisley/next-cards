@@ -1,27 +1,28 @@
 import Head from 'next/head'
-import Layout from '../components/layout'
+
 import Header from '../components/header'
+import Layout from '../components/layout'
 import Row from '../components/row'
 
 export default function Home() {
   const cat = {
-    "name": "cat",
-    "number": 1,
+    name: 'cat',
+    number: 1
   }
 
   const kiwi = {
-    "name": "kiwi",
-    "number": 1,
+    name: 'kiwi',
+    number: 1
   }
 
   const dragon = {
-    "name": "dragon",
-    "number": 3,
+    name: 'dragon',
+    number: 3
   }
 
-  const enemies = Array.from({ length: 2}, () => dragon)
-  const deck = Array.from({ length: 4}, () => kiwi)
-  const hand = Array.from({ length: 4}, () => cat)
+  const enemies = Array.from({ length: 2 }, () => dragon)
+  const deck = Array.from({ length: 4 }, () => kiwi)
+  const hand = Array.from({ length: 4 }, () => cat)
 
   return (
     <Layout>
