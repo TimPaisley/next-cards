@@ -10,9 +10,9 @@ import Row from '../components/row'
 import { addToHand, isHandFull, randomCards, remove, reorder } from '../lib/cards'
 
 export default function Home() {
-  const initialEnemies = randomCards(2, { id: 'enemies', minRarity: 2, maxRarity: 3 })
-  const initialDeck = randomCards(4, { id: 'deck', minRarity: 1, maxRarity: 1 })
-  const initialHand = randomCards(4, { id: 'hand', minRarity: 1, maxRarity: 1 })
+  const initialEnemies = randomCards(2, { minRarity: 2, maxRarity: 3 })
+  const initialDeck = randomCards(4, { minRarity: 1, maxRarity: 1 })
+  const initialHand = randomCards(4, { minRarity: 1, maxRarity: 1 })
 
   const [enemies] = useState(initialEnemies)
   const [deck, setDeck] = useState(initialDeck)
@@ -39,21 +39,35 @@ export default function Home() {
     }
 
     if (source.droppableId == destination.droppableId) {
+      // Reorder deck
       if (source.droppableId === 'deck') {
         const newDeck = reorder(deck, source.index, destination.index)
         setDeck(newDeck)
-      } else if (source.droppableId === 'hand') {
+      }
+
+      // Reorder hand
+      else if (source.droppableId === 'hand') {
         const newHand = reorder(hand, source.index, destination.index)
         setHand(newHand)
       }
-    } else if (source.droppableId === 'deck' && destination.droppableId === 'hand') {
+    }
+
+    // Add card from deck to hand
+    else if (source.droppableId === 'deck' && destination.droppableId === 'hand') {
       const result = addToHand(deck, hand, source.index, destination.index)
       setHand(result.hand)
-      setDeck(result.deck)
-    } else if (source.droppableId === 'hand' && destination.droppableId === 'discard') {
+      //setDeck(result.deck)
+      setDeck(randomCards(4, { minRarity: 1, maxRarity: 1 }))
+    }
+
+    // Discard card from hand
+    else if (source.droppableId === 'hand' && destination.droppableId === 'discard') {
       const result = remove(hand, source.index)
       setHand(result)
-    } else {
+    }
+
+    // Invalid drag
+    else {
       return
     }
   }
@@ -69,7 +83,7 @@ export default function Home() {
         </div>
 
         <div className="mx-4 border-t border-gray-500 pt-4 mt-2">
-          <Row disabled={isHandFull(hand)} droppableId="hand" cards={hand} />
+          <Row disabled={isHandFull(hand) && !isDraggingHand} droppableId="hand" cards={hand} />
         </div>
       </div>
     </DragDropContext>
