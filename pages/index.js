@@ -15,7 +15,7 @@ export default function Home() {
   const initialDeck = randomCards(4, { id: 'deck', minRarity: 1, maxRarity: 1 })
   const initialHand = randomCards(4, { id: 'hand', minRarity: 1, maxRarity: 1 })
 
-  const [enemies, setEnemies] = useState(initialEnemies)
+  const [enemies] = useState(initialEnemies)
   const [deck, setDeck] = useState(initialDeck)
   const [hand, setHand] = useState(initialHand)
   const [winReady, setWinReady] = useState(false)
