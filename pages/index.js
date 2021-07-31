@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 
@@ -59,43 +58,27 @@ export default function Home() {
     }
   }
 
+  const buyPhase = (
+    <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+      <div className="relative flex flex-col h-full py-4 overflow-hidden">
+        <div className="relative flex-1 flex flex-col mx-4">
+          <Discard disabled={!isDraggingHand} />
+          <Enemies enemies={enemies} />
+          <Phase />
+          <Row disabled={isDraggingHand} droppableId="deck" cards={deck} />
+        </div>
+
+        <div className="mx-4 border-t border-gray-500 pt-4 mt-2">
+          <Row droppableId="hand" cards={hand} />
+        </div>
+      </div>
+    </DragDropContext>
+  )
+
   return (
     <Layout>
-      <Head>
-        <meta charSet="utf-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta
-          name="viewport"
-          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
-        />
-        <meta name="description" content="Cards" />
-        <meta name="keywords" content="cards" />
-        <title>Cards</title>
-        <link href="/favicon.ico" rel="icon" />
-
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/icons/152.png"></link>
-        <meta name="theme-color" content="#fff" />
-      </Head>
-
       <Header />
-
-      {winReady && (
-        <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-          <div className="relative flex flex-col h-full py-4 overflow-hidden">
-            <div className="relative flex-1 flex flex-col mx-4">
-              <Discard disabled={!isDraggingHand} />
-              <Enemies enemies={enemies} />
-              <Phase />
-              <Row disabled={isDraggingHand} droppableId="deck" cards={deck} />
-            </div>
-
-            <div className="mx-4 border-t border-gray-500 pt-4 mt-2">
-              <Row droppableId="hand" cards={hand} />
-            </div>
-          </div>
-        </DragDropContext>
-      )}
+      {winReady && buyPhase}
     </Layout>
   )
 }
