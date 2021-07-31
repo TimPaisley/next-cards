@@ -2,9 +2,9 @@ import { Draggable, Droppable } from 'react-beautiful-dnd'
 
 import Card from './card'
 
-export default function Row({ droppableId, cards }) {
+export default function Row({ disabled, droppableId, cards }) {
   return (
-    <Droppable droppableId={droppableId} direction="horizontal">
+    <Droppable isDropDisabled={disabled} droppableId={droppableId} direction="horizontal">
       {(provided) => (
         <div className="flex mb-2" ref={provided.innerRef} {...provided.droppableProps}>
           {cards.map((card, i) => (

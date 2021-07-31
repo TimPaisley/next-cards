@@ -70,6 +70,7 @@ export default function Home() {
   const [deck, setDeck] = useState(initialDeck)
   const [hand, setHand] = useState(initialHand)
   const [winReady, setWinReady] = useState(false)
+  const [isDraggingHand, setIsDraggingHand] = useState(false)
 
   useEffect(() => {
     setWinReady(true)
@@ -97,8 +98,21 @@ export default function Home() {
     return result
   }
 
+  const remove = (list, index) => {
+    const result = list.splice(index, 1)
+
+    return result
+  }
+
+  const onDragStart = (start) => {
+    if (start.source.droppableId === 'hand') {
+      setIsDraggingHand(true)
+    }
+  }
+
   const onDragEnd = (result) => {
     const { source, destination } = result
+    setIsDraggingHand(false)
 
     if (!destination) {
       return
@@ -131,7 +145,7 @@ export default function Home() {
       <Header />
 
       {winReady && (
-        <DragDropContext onDragEnd={onDragEnd}>
+        <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
           <section className="flex flex-col h-full py-4 overflow-hidden">
             <div className="mx-4 flex-grow"></div>
 
@@ -143,7 +157,7 @@ export default function Home() {
             </div>
 
             <div className="mx-4">
-              <Row droppableId="deck" cards={deck} />
+              <Row disabled={isDraggingHand} droppableId="deck" cards={deck} />
             </div>
 
             <div className="mx-4 border-t border-gray-500 pt-4 mt-2">
