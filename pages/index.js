@@ -7,7 +7,7 @@ import Header from '../components/header'
 import Layout from '../components/layout'
 import Phase from '../components/phase'
 import Row from '../components/row'
-import { addToHand, randomCards, remove, reorder } from '../lib/cards'
+import { addToHand, isHandFull, randomCards, remove, reorder } from '../lib/cards'
 
 export default function Home() {
   const initialEnemies = randomCards(2, { id: 'enemies', minRarity: 2, maxRarity: 3 })
@@ -47,7 +47,7 @@ export default function Home() {
         setHand(newHand)
       }
     } else if (source.droppableId === 'deck' && destination.droppableId === 'hand') {
-      const result = addToHand(deck, hand, source, destination)
+      const result = addToHand(deck, hand, source.index, destination.index)
       setHand(result.hand)
       setDeck(result.deck)
     } else if (source.droppableId === 'hand' && destination.droppableId === 'discard') {
@@ -69,7 +69,7 @@ export default function Home() {
         </div>
 
         <div className="mx-4 border-t border-gray-500 pt-4 mt-2">
-          <Row droppableId="hand" cards={hand} />
+          <Row disabled={isHandFull(hand)} droppableId="hand" cards={hand} />
         </div>
       </div>
     </DragDropContext>
