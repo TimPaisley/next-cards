@@ -1,10 +1,12 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { DragDropContext } from 'react-beautiful-dnd'
 
 import Discard from '../components/discard'
+import { Enemies } from '../components/enemies'
 import Header from '../components/header'
 import Layout from '../components/layout'
+import Phase from '../components/phase'
 import Row from '../components/row'
 
 export default function Home() {
@@ -113,7 +115,6 @@ export default function Home() {
   }
 
   const onDragEnd = (result) => {
-    console.log(result)
     const { source, destination } = result
     setIsDraggingHand(false)
 
@@ -152,27 +153,18 @@ export default function Home() {
 
       {winReady && (
         <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-          <section className="relative flex flex-col h-full py-4 overflow-hidden">
-            <div className="relative flex-1 flex flex-col">
+          <div className="relative flex flex-col h-full py-4 overflow-hidden">
+            <div className="relative flex-1 flex flex-col mx-4">
               <Discard disabled={!isDraggingHand} />
-
-              <div className="flex-1">Enemies</div>
-
-              <div className="mx-4 flex-grow"></div>
-              <div className="p-4 flex space-x-4 justify-center items-center">
-                <div className="w-3 h-3 bg-black rounded-full"></div>
-                <div className="w-3 h-3 border border-black rounded-full"></div>
-                <div className="w-3 h-3 border border-black rounded-full"></div>
-                <div className="w-3 h-3 border border-red-500 rounded-full"></div>
-              </div>
-              <div className="mx-4">
-                <Row disabled={isDraggingHand} droppableId="deck" cards={deck} />
-              </div>
+              <Enemies enemies={enemies} />
+              <Phase />
+              <Row disabled={isDraggingHand} droppableId="deck" cards={deck} />
             </div>
+
             <div className="mx-4 border-t border-gray-500 pt-4 mt-2">
               <Row droppableId="hand" cards={hand} />
             </div>
-          </section>
+          </div>
         </DragDropContext>
       )}
     </Layout>
