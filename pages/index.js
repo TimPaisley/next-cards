@@ -8,66 +8,12 @@ import Header from '../components/header'
 import Layout from '../components/layout'
 import Phase from '../components/phase'
 import Row from '../components/row'
+import { addToHand, randomCards, remove, reorder } from '../lib/cards'
 
 export default function Home() {
-  const initialEnemies = [
-    {
-      id: 'enemy-1',
-      type: 'dragon',
-      number: 8
-    },
-    {
-      id: 'enemy-2',
-      type: 'dragon',
-      number: 9
-    }
-  ]
-
-  const initialDeck = [
-    {
-      id: 'deck-1',
-      type: 'cat',
-      number: 4
-    },
-    {
-      id: 'deck-2',
-      type: 'cat',
-      number: 1
-    },
-    {
-      id: 'deck-3',
-      type: 'kiwi',
-      number: 4
-    },
-    {
-      id: 'deck-4',
-      type: 'cat',
-      number: 7
-    }
-  ]
-
-  const initialHand = [
-    {
-      id: 'hand-1',
-      type: 'kiwi',
-      number: 1
-    },
-    {
-      id: 'hand-2',
-      type: 'cat',
-      number: 5
-    },
-    {
-      id: 'hand-3',
-      type: 'cat',
-      number: 8
-    },
-    {
-      id: 'hand-4',
-      type: 'kiwi',
-      number: 3
-    }
-  ]
+  const initialEnemies = randomCards(2, { id: 'enemies', minRarity: 2, maxRarity: 3 })
+  const initialDeck = randomCards(4, { id: 'deck', minRarity: 1, maxRarity: 1 })
+  const initialHand = randomCards(4, { id: 'hand', minRarity: 1, maxRarity: 1 })
 
   const [enemies, setEnemies] = useState(initialEnemies)
   const [deck, setDeck] = useState(initialDeck)
@@ -78,35 +24,6 @@ export default function Home() {
   useEffect(() => {
     setWinReady(true)
   }, [])
-
-  const addToHand = (source, destination, droppableSource, droppableDestination) => {
-    const sourceClone = Array.from(source)
-    const destClone = Array.from(destination)
-    const [removed] = sourceClone.splice(droppableSource.index, 1)
-
-    destClone.splice(droppableDestination.index, 0, removed)
-
-    const result = {}
-    result[droppableSource.droppableId] = sourceClone
-    result[droppableDestination.droppableId] = destClone
-
-    return result
-  }
-
-  const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list)
-    const [removed] = result.splice(startIndex, 1)
-    result.splice(endIndex, 0, removed)
-
-    return result
-  }
-
-  const remove = (list, index) => {
-    const result = Array.from(list)
-    result.splice(index, 1)
-
-    return result
-  }
 
   const onDragStart = (start) => {
     if (start.source.droppableId === 'hand') {
