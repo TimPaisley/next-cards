@@ -4,13 +4,25 @@ import Card from './card'
 
 export default function Row({ disabled, droppableId, cards }) {
   const getStyle = (style, snapshot) => {
-    if (!snapshot.isDropAnimating || snapshot.draggingOver !== 'discard') {
-      return style
+    // Dragging over discard zone
+    if (!snapshot.isDropAnimating && snapshot.draggingOver === 'discard') {
+      return {
+        ...style,
+        opacity: 0.5
+      }
     }
 
-    return {
-      ...style,
-      visibility: 'hidden'
+    // Dropping into discard zone
+    else if (snapshot.isDropAnimating && snapshot.draggingOver === 'discard') {
+      return {
+        ...style,
+        visibility: 'hidden'
+      }
+    }
+
+    // No style change
+    else {
+      return style
     }
   }
 
