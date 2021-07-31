@@ -5,7 +5,7 @@ import Discard from '../components/discard'
 import { Enemies } from '../components/enemies'
 import Header from '../components/header'
 import Layout from '../components/layout'
-import Phase from '../components/phase'
+import BuyPhase from '../components/phase'
 import Row from '../components/row'
 import { addToHand, isHandFull, randomCards, remove, reorder } from '../lib/cards'
 
@@ -19,6 +19,7 @@ export default function Home() {
   const [hand, setHand] = useState(initialHand)
   const [winReady, setWinReady] = useState(false)
   const [isDraggingHand, setIsDraggingHand] = useState(false)
+  const [mana, setMana] = useState(10)
 
   useEffect(() => {
     setWinReady(true)
@@ -56,8 +57,7 @@ export default function Home() {
     else if (source.droppableId === 'deck' && destination.droppableId === 'hand') {
       const result = addToHand(deck, hand, source.index, destination.index)
       setHand(result.hand)
-      //setDeck(result.deck)
-      setDeck(randomCards(4, { minRarity: 1, maxRarity: 1 }))
+      setDeck(result.deck)
     }
 
     // Discard card from hand
@@ -72,13 +72,18 @@ export default function Home() {
     }
   }
 
+  const refresh = () => {
+    setDeck(randomCards(4, { minRarity: 1, maxRarity: 1 }))
+    setMana(mana - 1)
+  }
+
   const buyPhase = (
     <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <div className="relative flex flex-col h-full py-4 overflow-hidden">
         <div className="relative flex-1 flex flex-col mx-4">
           <Discard disabled={!isDraggingHand} />
           <Enemies enemies={enemies} />
-          <Phase />
+          <BuyPhase mana={mana} refresh={refresh} />
           <Row disabled={isDraggingHand} droppableId="deck" cards={deck} />
         </div>
 
