@@ -23,6 +23,15 @@ export default function Home() {
   const [mana, setMana] = useState(10)
   const [isBattlePhase, setIsBattlePhase] = useState(false)
 
+  const reset = () => {
+    setEnemies(randomCards(2, { minRarity: 2, maxRarity: 3 }))
+    setDeck(randomCards(4, { minRarity: 1, maxRarity: 1 }))
+    setHand(randomCards(4, { minRarity: 1, maxRarity: 1 }))
+    setIsDraggingHand(false)
+    setMana(10)
+    setIsBattlePhase(false)
+  }
+
   useEffect(() => {
     setWinReady(true)
   }, [])
@@ -141,7 +150,7 @@ export default function Home() {
 
   return (
     <Layout>
-      <Header />
+      <Header reset={reset} />
       {isBattlePhase ? battlePhase : winReady && buyPhase}
     </Layout>
   )
