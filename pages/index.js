@@ -82,9 +82,27 @@ export default function Home() {
   const enterBattlePhase = async () => {
     setIsBattlePhase(true)
     const result = fight(hand, enemies)
-    setHand(result.hand)
-    setEnemies(result.enemies)
+    await stepThroughBattle(result.battle)
     console.log(result)
+  }
+
+  const stepThroughBattle = async (battle) => {
+    await sleep(1000)
+
+    for (var i = 0; i < battle.length; i++) {
+      if (battle[i].handAttacking) {
+        setHand(battle[i].attackers)
+        setEnemies(battle[i].defenders)
+      } else {
+        setHand(battle[i].defenders)
+        setEnemies(battle[i].attackers)
+      }
+      await sleep(1000)
+    }
+  }
+
+  const sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms))
   }
 
   const buyPhase = (
