@@ -1,25 +1,27 @@
 import { useEffect, useState } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 
+import Card from '../components/card'
 import Discard from '../components/discard'
 import { Enemies } from '../components/enemies'
 import Header from '../components/header'
 import Layout from '../components/layout'
 import BuyPhase from '../components/phase'
 import Row from '../components/row'
-import { addToHand, isHandFull, randomCards, remove, reorder } from '../lib/cards'
+import { addToHand, fight, isHandFull, randomCards, remove, reorder } from '../lib/cards'
 
 export default function Home() {
   const initialEnemies = randomCards(2, { minRarity: 2, maxRarity: 3 })
   const initialDeck = randomCards(4, { minRarity: 1, maxRarity: 1 })
   const initialHand = randomCards(4, { minRarity: 1, maxRarity: 1 })
 
-  const [enemies] = useState(initialEnemies)
+  const [enemies, setEnemies] = useState(initialEnemies)
   const [deck, setDeck] = useState(initialDeck)
   const [hand, setHand] = useState(initialHand)
   const [winReady, setWinReady] = useState(false)
   const [isDraggingHand, setIsDraggingHand] = useState(false)
   const [mana, setMana] = useState(10)
+  const [isBattlePhase, setIsBattlePhase] = useState(false)
 
   useEffect(() => {
     setWinReady(true)
@@ -77,13 +79,21 @@ export default function Home() {
     setMana(mana - 1)
   }
 
+  const enterBattlePhase = async () => {
+    setIsBattlePhase(true)
+    const result = fight(hand, enemies)
+    setHand(result.hand)
+    setEnemies(result.enemies)
+    console.log(result)
+  }
+
   const buyPhase = (
     <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <div className="relative flex flex-col h-full py-4 overflow-hidden">
         <div className="relative flex-1 flex flex-col mx-4">
           <Discard disabled={!isDraggingHand} />
           <Enemies enemies={enemies} />
-          <BuyPhase mana={mana} refresh={refresh} />
+          <BuyPhase mana={mana} refresh={refresh} endTurn={enterBattlePhase} />
           <Row disabled={isDraggingHand} droppableId="deck" cards={deck} />
         </div>
 
@@ -94,10 +104,27 @@ export default function Home() {
     </DragDropContext>
   )
 
+  const battlePhase = (
+    <div className="flex flex-col space-y-4 h-full">
+      <div className="flex-1 flex flex-col justify-end">
+        <div>
+          <Enemies enemies={enemies} />
+        </div>
+      </div>
+      <div className="flex-1">
+        <div className="flex">
+          {hand.map((card) => (
+            <Card key={card.id} card={card} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+
   return (
     <Layout>
       <Header />
-      {winReady && buyPhase}
+      {isBattlePhase ? battlePhase : winReady && buyPhase}
     </Layout>
   )
 }
