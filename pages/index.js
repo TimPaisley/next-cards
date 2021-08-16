@@ -3,6 +3,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 
 import Card from '../components/card'
 import Discard from '../components/discard'
+import Sortable from '../components/dnd-kit/Sortable'
 import { Enemies } from '../components/enemies'
 import Header from '../components/header'
 import Layout from '../components/layout'
@@ -151,7 +152,7 @@ export default function Home() {
   return (
     <Layout>
       <Header reset={reset} />
-      {isBattlePhase ? battlePhase : winReady && buyPhase}
+      <Sortable />
     </Layout>
   )
 }
