@@ -3,7 +3,7 @@ import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortabl
 
 import SortableItem from './SortableItem'
 
-export default function SortableContainer({ id, items }) {
+export default function SortableContainer({ id, items, activeId }) {
   const { setNodeRef } = useDroppable({ id })
 
   return (
@@ -12,7 +12,7 @@ export default function SortableContainer({ id, items }) {
         ref={setNodeRef}
         className="p-2 mb-4 flex justify-center space-x-2 bg-gray-100 rounded-md">
         {items.map((id) => (
-          <SortableItem key={id} id={id} />
+          <SortableItem key={id} id={id} active={id === activeId} />
         ))}
       </div>
     </SortableContext>

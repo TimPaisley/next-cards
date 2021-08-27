@@ -38,8 +38,8 @@ export default function Sortable() {
       onDragCancel={handleDragCancel}
       onDragEnd={handleDragEnd}>
       <div className="flex-grow flex flex-col justify-end">
-        <SortableContainer id="animals" items={items.animals} />
-        <SortableContainer id="fruit" items={items.fruit} />
+        <SortableContainer id="animals" items={items.animals} activeId={activeId} />
+        <SortableContainer id="fruit" items={items.fruit} activeId={activeId} />
       </div>
       <DragOverlay>{activeId ? <Item id={activeId} /> : null}</DragOverlay>
     </DndContext>

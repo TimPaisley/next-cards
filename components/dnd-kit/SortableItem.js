@@ -9,8 +9,10 @@ export default function SortableItem(props) {
     transition
   }
 
+  const className = props.active ? 'opacity-50' : ''
+
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div ref={setNodeRef} className={className} style={style} {...attributes} {...listeners}>
       <Item id={props.id} />
     </div>
   )
