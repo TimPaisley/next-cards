@@ -53,6 +53,20 @@ export default function Sortable() {
     return Object.keys(items).find((key) => items[key].includes(id))
   }
 
+  function validMove(overContainer, activeContainer) {
+    if (!overContainer || !activeContainer) {
+      return false
+    }
+
+    if (overContainer !== activeContainer) {
+      if (overContainer === 'animals' && items.animals.length >= 4) {
+        return false
+      }
+    }
+
+    return true
+  }
+
   function handleDragStart({ active }) {
     setActiveId(active.id)
     setClonedItems(items)
@@ -60,15 +74,10 @@ export default function Sortable() {
 
   function handleDragOver({ active, over }) {
     const overId = over?.id
-
-    if (!overId) {
-      return
-    }
-
-    const overContainer = findContainer(overId)
     const activeContainer = findContainer(active.id)
+    const overContainer = findContainer(overId)
 
-    if (!overContainer || !activeContainer) {
+    if (!validMove(overContainer, activeContainer)) {
       return
     }
 
@@ -137,6 +146,11 @@ export default function Sortable() {
     // }
 
     const overContainer = findContainer(overId)
+
+    if (!validMove(overContainer, activeContainer)) {
+      setActiveId(null)
+      return
+    }
 
     if (activeContainer && overContainer) {
       const activeIndex = items[activeContainer].indexOf(active.id)
