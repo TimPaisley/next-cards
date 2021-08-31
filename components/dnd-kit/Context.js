@@ -26,7 +26,7 @@ export default function Context({ children, id, items, setItems, setActiveId }) 
     }
 
     if (overContainer !== activeContainer) {
-      if (overContainer === 'animals' && items.animals.length >= 4) {
+      if (overContainer === 'deck' && items.deck.length >= 4) {
         return false
       }
     }

@@ -1,27 +1,49 @@
 import { DragOverlay } from '@dnd-kit/core'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
+import { randomCards } from '../../lib/cards'
 import Context from './Context'
 import SortableContainer from './SortableContainer'
 import { Item } from './SortableItem'
 import Trash from './Trash'
 
 export default function Sortable() {
-  const [items, setItems] = useState({
-    animals: ['cat', 'dog', 'rabbit', 'chicken'],
-    fruit: ['apple', 'banana', 'orange', 'kiwifruit'],
+  const initialDeck = randomCards(4, { minRarity: 1, maxRarity: 1 })
+  const initialAllies = randomCards(4, { minRarity: 1, maxRarity: 1 })
+
+  const [cards, setCards] = useState({
+    deck: initialDeck.map((c) => c.id),
+    allies: initialAllies.map((c) => c.id),
     void: []
   })
+
+  const [cardMap] = useState({
+    ...Object.fromEntries(initialDeck.map((d) => [d.id, d])),
+    ...Object.fromEntries(initialAllies.map((a) => [a.id, a]))
+  })
+
+  const [winReady, setWinReady] = useState(false)
   const [activeId, setActiveId] = useState()
 
+  useEffect(() => {
+    setWinReady(true)
+  }, [])
+
   return (
-    <Context id="dnd-context" items={items} setItems={setItems} setActiveId={setActiveId}>
-      <div className="flex-grow flex justify-end">{activeId && <Trash />}</div>
-      <div className="flex flex-col">
-        <SortableContainer id="animals" items={items.animals} activeId={activeId} />
-        <SortableContainer id="fruit" items={items.fruit} activeId={activeId} />
-      </div>
-      <DragOverlay>{activeId ? <Item id={activeId} /> : null}</DragOverlay>
-    </Context>
+    winReady && (
+      <Context id="dnd-context" items={cards} setItems={setCards} setActiveId={setActiveId}>
+        <div className="flex-grow flex justify-end">{activeId && <Trash />}</div>
+        <div className="flex flex-col">
+          <SortableContainer id="deck" items={cards.deck} itemMap={cardMap} activeId={activeId} />
+          <SortableContainer
+            id="allies"
+            items={cards.allies}
+            itemMap={cardMap}
+            activeId={activeId}
+          />
+        </div>
+        <DragOverlay>{activeId ? <Item card={cardMap[activeId]} /> : null}</DragOverlay>
+      </Context>
+    )
   )
 }

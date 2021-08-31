@@ -1,27 +1,47 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { faGripLines } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-export default function SortableItem(props) {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: props.id })
+export default function SortableItem({ card, isActive }) {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: card.id })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition
   }
 
-  const className = props.active ? 'opacity-50' : ''
+  const className = isActive ? 'opacity-50' : ''
 
   return (
     <div ref={setNodeRef} className={className} style={style} {...attributes} {...listeners}>
-      <Item id={props.id} />
+      <Item card={card} />
     </div>
   )
 }
 
-export function Item(props) {
+export function Item({ card }) {
   return (
-    <div className="w-20 h-28 p-4 border border-gray-500 select-none bg-white rounded-md">
-      {props.id}
+    <div className="flex w-20 h-28 p-1 border border-gray-500 select-none bg-white rounded-md">
+      <div className="flex flex-col justify-start items-center text-center">
+        <div className="text-xl font-bold">{card.attack}</div>
+        <div className="w-2">
+          <FontAwesomeIcon icon={faGripLines} />
+        </div>
+      </div>
+
+      <div className="flex flex-col flex-grow justify-center items-center">
+        <div className="w-8">
+          <FontAwesomeIcon icon={card.icon} />
+        </div>
+      </div>
+
+      <div className="flex flex-col justify-end items-center text-center">
+        <div className="w-2">
+          <FontAwesomeIcon icon={faGripLines} />
+        </div>
+        <div className="text-xl font-bold">{card.health}</div>
+      </div>
     </div>
   )
 }
