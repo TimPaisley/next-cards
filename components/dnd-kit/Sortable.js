@@ -33,13 +33,14 @@ export default function Sortable() {
     winReady && (
       <Context id="dnd-context" items={cards} setItems={setCards} setActiveId={setActiveId}>
         <div className="flex-grow flex justify-end">{activeId && <Trash />}</div>
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center">
           <SortableContainer id="deck" items={cards.deck} itemMap={cardMap} activeId={activeId} />
           <SortableContainer
             id="allies"
             items={cards.allies}
             itemMap={cardMap}
             activeId={activeId}
+            highlight
           />
         </div>
         <DragOverlay>{activeId ? <Item card={cardMap[activeId]} /> : null}</DragOverlay>
