@@ -18,17 +18,32 @@ export default function Sortable() {
     void: []
   })
 
-  const [cardMap] = useState({
-    ...Object.fromEntries(initialDeck.map((d) => [d.id, d])),
-    ...Object.fromEntries(initialAllies.map((a) => [a.id, a]))
+  const buildIdMap = (cards) => {
+    return Object.fromEntries(cards.map((c) => [c.id, c]))
+  }
+
+  const [cardMap, setCardMap] = useState({
+    ...buildIdMap(initialDeck),
+    ...buildIdMap(initialAllies)
   })
 
   const [winReady, setWinReady] = useState(false)
   const [activeId, setActiveId] = useState()
 
+  const [mana, setMana] = useState(10)
+
   useEffect(() => {
     setWinReady(true)
   }, [])
+
+  const refreshDeck = () => {
+    const newCards = randomCards(4, { minRarity: 1, maxRarity: 1 })
+    const newIds = newCards.map((c) => c.id)
+
+    setCardMap({ ...cardMap, ...buildIdMap(newCards) })
+    setCards({ ...cards, deck: newIds })
+    setMana(mana - 1)
+  }
 
   return (
     winReady && (
@@ -36,7 +51,7 @@ export default function Sortable() {
         <div className="flex-grow flex justify-end">{activeId && <Trash />}</div>
 
         <div className="px-4">
-          <Controls />
+          <Controls mana={mana} refresh={refreshDeck} />
         </div>
 
         <div className="flex flex-col items-center">
