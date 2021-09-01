@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 
 import { randomCards } from '../../lib/cards'
 import Context from './Context'
+import Controls from './Controls'
 import SortableContainer from './SortableContainer'
 import { Item } from './SortableItem'
 import Trash from './Trash'
@@ -33,6 +34,11 @@ export default function Sortable() {
     winReady && (
       <Context id="dnd-context" items={cards} setItems={setCards} setActiveId={setActiveId}>
         <div className="flex-grow flex justify-end">{activeId && <Trash />}</div>
+
+        <div className="px-4">
+          <Controls />
+        </div>
+
         <div className="flex flex-col items-center">
           <SortableContainer id="deck" items={cards.deck} itemMap={cardMap} activeId={activeId} />
           <SortableContainer

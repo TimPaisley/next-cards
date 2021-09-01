@@ -8,7 +8,7 @@ export default function Trash() {
   return (
     <div
       ref={setNodeRef}
-      className="p-2 mb-4 w-full flex items-center justify-center border border-gray-500">
+      className="p-2 mb-2 w-full flex items-center justify-center border border-gray-500">
       Drop here to discard
     </div>
   )
