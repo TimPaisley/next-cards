@@ -26,7 +26,14 @@ export default function Context({ children, id, items, setItems, setActiveId }) 
     }
 
     if (overContainer !== activeContainer) {
-      if (overContainer === 'deck' && items.deck.length >= 4) {
+      if (activeContainer === 'deck' && overContainer === 'void') {
+        // Can't trash cards from deck
+        return false
+      } else if (activeContainer === 'hand' && overContainer === 'deck') {
+        // Can't drag from hand to deck
+        return false
+      } else if (overContainer === 'hand' && items.hand.length >= 4) {
+        // Can't drag into hand if hand is full
         return false
       }
     }

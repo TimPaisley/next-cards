@@ -10,11 +10,11 @@ import Trash from './Trash'
 
 export default function Sortable() {
   const initialDeck = randomCards(4, { minRarity: 1, maxRarity: 1 })
-  const initialAllies = randomCards(4, { minRarity: 1, maxRarity: 1 })
+  const initialHand = randomCards(4, { minRarity: 1, maxRarity: 1 })
 
   const [cards, setCards] = useState({
     deck: initialDeck.map((c) => c.id),
-    allies: initialAllies.map((c) => c.id),
+    hand: initialHand.map((c) => c.id),
     void: []
   })
 
@@ -24,7 +24,7 @@ export default function Sortable() {
 
   const [cardMap, setCardMap] = useState({
     ...buildIdMap(initialDeck),
-    ...buildIdMap(initialAllies)
+    ...buildIdMap(initialHand)
   })
 
   const [winReady, setWinReady] = useState(false)
@@ -57,8 +57,8 @@ export default function Sortable() {
         <div className="flex flex-col items-center">
           <SortableContainer id="deck" items={cards.deck} itemMap={cardMap} activeId={activeId} />
           <SortableContainer
-            id="allies"
-            items={cards.allies}
+            id="hand"
+            items={cards.hand}
             itemMap={cardMap}
             activeId={activeId}
             highlight
