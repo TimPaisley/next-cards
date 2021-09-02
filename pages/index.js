@@ -151,7 +151,6 @@ export default function Home() {
 
   return (
     <Layout>
-      <Header reset={reset} />
       <Sortable />
     </Layout>
   )

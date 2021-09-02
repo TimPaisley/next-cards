@@ -2,6 +2,7 @@ import { DragOverlay } from '@dnd-kit/core'
 import { useEffect, useState } from 'react'
 
 import { randomCards } from '../../lib/cards'
+import Header from '../header'
 import Context from './Context'
 import Controls from './Controls'
 import Row from './Row'
@@ -14,10 +15,12 @@ export default function Sortable() {
   const initialDeck = randomCards(4, { minRarity: 1, maxRarity: 1 })
   const initialHand = randomCards(4, { minRarity: 1, maxRarity: 1 })
 
+  const cardIds = (cards) => cards.map((c) => c.id)
+
   const [cards, setCards] = useState({
-    enemies: initialEnemies.map((c) => c.id),
-    deck: initialDeck.map((c) => c.id),
-    hand: initialHand.map((c) => c.id),
+    enemies: cardIds(initialEnemies),
+    deck: cardIds(initialDeck),
+    hand: cardIds(initialHand),
     void: []
   })
 
@@ -48,6 +51,28 @@ export default function Sortable() {
     setCardMap({ ...cardMap, ...buildIdMap(newCards) })
     setCards({ ...cards, deck: newIds })
     setMana(mana - 1)
+  }
+
+  const resetGame = () => {
+    const newEnemies = randomCards(2, { minRarity: 2, maxRarity: 3 })
+    const newDeck = randomCards(4, { minRarity: 1, maxRarity: 1 })
+    const newHand = randomCards(4, { minRarity: 1, maxRarity: 1 })
+
+    setCards({
+      enemies: cardIds(newEnemies),
+      deck: cardIds(newDeck),
+      hand: cardIds(newHand),
+      void: []
+    })
+
+    setCardMap({
+      ...buildIdMap(newEnemies),
+      ...buildIdMap(newDeck),
+      ...buildIdMap(newHand)
+    })
+
+    setMana(10)
+    setIsBattlePhase(false)
   }
 
   const buyPhase = (
@@ -92,5 +117,10 @@ export default function Sortable() {
     </>
   )
 
-  return isBattlePhase ? battlePhase : winReady && buyPhase
+  return (
+    <>
+      <Header reset={resetGame} />
+      {isBattlePhase ? battlePhase : winReady && buyPhase}
+    </>
+  )
 }
