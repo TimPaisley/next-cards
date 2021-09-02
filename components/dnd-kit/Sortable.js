@@ -1,7 +1,7 @@
 import { DragOverlay } from '@dnd-kit/core'
 import { useEffect, useState } from 'react'
 
-import { randomCards } from '../../lib/cards'
+import { fight, randomCards } from '../../lib/cards'
 import Header from '../header'
 import Context from './Context'
 import Controls from './Controls'
@@ -75,6 +75,34 @@ export default function Sortable() {
     setIsBattlePhase(false)
   }
 
+  const enterBattlePhase = async () => {
+    setIsBattlePhase(true)
+    const result = fight(
+      cards.hand.map((id) => cardMap[id]),
+      cards.enemies.map((id) => cardMap[id])
+    )
+    await stepThroughBattle(result.battle)
+    console.log('Battle results', result)
+  }
+
+  const stepThroughBattle = async (battle) => {
+    await sleep(1000)
+
+    for (var i = 0; i < battle.length; i++) {
+      setCardMap({
+        ...cardMap,
+        ...buildIdMap(battle[i].attackers),
+        ...buildIdMap(battle[i].defenders)
+      })
+
+      await sleep(1000)
+    }
+  }
+
+  const sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+  }
+
   const buyPhase = (
     <Context id="dnd-context" items={cards} setItems={setCards} setActive={setActive}>
       <div className="relative flex-grow flex justify-center">
@@ -87,7 +115,7 @@ export default function Sortable() {
           mana={mana}
           refresh={refreshDeck}
           isBattlePhase={isBattlePhase}
-          endTurn={() => setIsBattlePhase(!isBattlePhase)}
+          endTurn={enterBattlePhase}
         />
       </div>
 
