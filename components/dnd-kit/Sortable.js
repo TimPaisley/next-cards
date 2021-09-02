@@ -35,7 +35,7 @@ export default function Sortable() {
   })
 
   const [winReady, setWinReady] = useState(false)
-  const [activeId, setActiveId] = useState()
+  const [active, setActive] = useState()
 
   const [mana, setMana] = useState(10)
   const [isBattlePhase, setIsBattlePhase] = useState(false)
@@ -76,10 +76,10 @@ export default function Sortable() {
   }
 
   const buyPhase = (
-    <Context id="dnd-context" items={cards} setItems={setCards} setActiveId={setActiveId}>
-      <div className="flex-grow flex justify-center">
+    <Context id="dnd-context" items={cards} setItems={setCards} setActive={setActive}>
+      <div className="relative flex-grow flex justify-center">
         <Row items={cards.enemies} renderItem={(id) => <Item card={cardMap[id]} />} />
-        {activeId && <Trash />}
+        {active?.containerId === 'hand' && <Trash />}
       </div>
 
       <div className="px-4">
@@ -92,16 +92,16 @@ export default function Sortable() {
       </div>
 
       <div className="flex flex-col items-center">
-        <SortableContainer id="deck" items={cards.deck} itemMap={cardMap} activeId={activeId} />
+        <SortableContainer id="deck" items={cards.deck} itemMap={cardMap} activeId={active?.id} />
         <SortableContainer
           id="hand"
           items={cards.hand}
           itemMap={cardMap}
-          activeId={activeId}
+          activeId={active?.id}
           highlight
         />
       </div>
-      <DragOverlay>{activeId ? <Item card={cardMap[activeId]} /> : null}</DragOverlay>
+      <DragOverlay>{active ? <Item card={cardMap[active.id]} /> : null}</DragOverlay>
     </Context>
   )
 

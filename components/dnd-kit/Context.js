@@ -2,7 +2,7 @@ import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { useState } from 'react'
 
-export default function Context({ children, id, items, setItems, setActiveId }) {
+export default function Context({ children, id, items, setItems, setActive }) {
   const [clonedItems, setClonedItems] = useState()
 
   const sensors = useSensors(
@@ -42,7 +42,7 @@ export default function Context({ children, id, items, setItems, setActiveId }) 
   }
 
   function handleDragStart({ active }) {
-    setActiveId(active.id)
+    setActive({ id: active.id, containerId: active.data.current.sortable.containerId })
     setClonedItems(items)
   }
 
@@ -96,7 +96,7 @@ export default function Context({ children, id, items, setItems, setActiveId }) 
       setItems(clonedItems)
     }
 
-    setActiveId(null)
+    setActive(null)
     setClonedItems(null)
   }
 
@@ -104,7 +104,7 @@ export default function Context({ children, id, items, setItems, setActiveId }) 
     const activeContainer = findContainer(active.id)
 
     if (!activeContainer) {
-      setActiveId(null)
+      setActive(null)
       return
     }
 
@@ -115,14 +115,14 @@ export default function Context({ children, id, items, setItems, setActiveId }) 
         ...(over?.id === 'void' ? items : clonedItems),
         ['void']: []
       }))
-      setActiveId(null)
+      setActive(null)
       return
     }
 
     const overContainer = findContainer(overId)
 
     if (!validMove(overContainer, activeContainer)) {
-      setActiveId(null)
+      setActive(null)
       return
     }
 
@@ -138,7 +138,7 @@ export default function Context({ children, id, items, setItems, setActiveId }) 
       }
     }
 
-    setActiveId(null)
+    setActive(null)
   }
 
   return (
