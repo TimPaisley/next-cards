@@ -1,10 +1,10 @@
 import { DragOverlay } from '@dnd-kit/core'
 import { useEffect, useState } from 'react'
 
-import { fight, randomCards } from '../../lib/cards'
-import Header from '../header'
+import { fight, randomCards } from '../lib/cards'
 import Context from './Context'
 import Controls from './Controls'
+import Header from './header'
 import Row from './Row'
 import SortableContainer from './SortableContainer'
 import { Item } from './SortableItem'
