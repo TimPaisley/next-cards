@@ -1,10 +1,10 @@
-import Layout from '../components/layout'
-import Sortable from '../components/Sortable'
+import Game from '../components/Game'
+import Layout from '../components/Layout'
 
 export default function Home() {
   return (
     <Layout>
-      <Sortable />
+      <Game />
     </Layout>
   )
 }

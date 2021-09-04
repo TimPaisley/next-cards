@@ -1,10 +1,10 @@
 import { useDroppable } from '@dnd-kit/core'
 import { horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
 
-import Row from './Row'
-import SortableItem from './SortableItem'
+import Row from '../Row'
+import Item from './Item'
 
-export default function SortableContainer({ id, highlight = false, items, itemMap, activeId }) {
+export default function Container({ id, highlight = false, items, itemMap, activeId }) {
   const { setNodeRef } = useDroppable({ id })
 
   return (
@@ -13,9 +13,7 @@ export default function SortableContainer({ id, highlight = false, items, itemMa
         <Row
           highlight={highlight}
           items={items}
-          renderItem={(id) => (
-            <SortableItem key={id} card={itemMap[id]} isActive={id === activeId} />
-          )}
+          renderItem={(id) => <Item key={id} card={itemMap[id]} isActive={id === activeId} />}
         />
       </div>
     </SortableContext>

@@ -1,6 +1,6 @@
 import { useDroppable } from '@dnd-kit/core'
 
-export default function Trash() {
+export default function Discard() {
   const { setNodeRef } = useDroppable({
     id: 'void'
   })

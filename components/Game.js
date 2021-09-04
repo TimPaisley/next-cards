@@ -2,15 +2,15 @@ import { DragOverlay } from '@dnd-kit/core'
 import { useEffect, useState } from 'react'
 
 import { fight, randomCards } from '../lib/cards'
-import Context from './Context'
+import Card from './Card'
 import Controls from './Controls'
-import Header from './header'
+import Discard from './Discard'
+import Container from './DragDrop/Container'
+import Context from './DragDrop/Context'
+import Header from './Header'
 import Row from './Row'
-import SortableContainer from './SortableContainer'
-import { Item } from './SortableItem'
-import Trash from './Trash'
 
-export default function Sortable() {
+export default function Game() {
   const initialEnemies = randomCards(2, { minRarity: 2, maxRarity: 3 })
   const initialDeck = randomCards(4, { minRarity: 1, maxRarity: 1 })
   const initialHand = randomCards(4, { minRarity: 1, maxRarity: 1 })
@@ -106,8 +106,8 @@ export default function Sortable() {
   const buyPhase = (
     <Context id="dnd-context" items={cards} setItems={setCards} setActive={setActive}>
       <div className="relative flex-grow flex justify-center">
-        <Row items={cards.enemies} renderItem={(id) => <Item card={cardMap[id]} />} />
-        {active?.containerId === 'hand' && <Trash />}
+        <Row items={cards.enemies} renderItem={(id) => <Card card={cardMap[id]} />} />
+        {active?.containerId === 'hand' && <Discard />}
       </div>
 
       <div className="px-4">
@@ -120,27 +120,21 @@ export default function Sortable() {
       </div>
 
       <div className="flex flex-col items-center">
-        <SortableContainer id="deck" items={cards.deck} itemMap={cardMap} activeId={active?.id} />
-        <SortableContainer
-          id="hand"
-          items={cards.hand}
-          itemMap={cardMap}
-          activeId={active?.id}
-          highlight
-        />
+        <Container id="deck" items={cards.deck} itemMap={cardMap} activeId={active?.id} />
+        <Container id="hand" items={cards.hand} itemMap={cardMap} activeId={active?.id} highlight />
       </div>
-      <DragOverlay>{active ? <Item card={cardMap[active.id]} /> : null}</DragOverlay>
+      <DragOverlay>{active ? <Card card={cardMap[active.id]} /> : null}</DragOverlay>
     </Context>
   )
 
   const battlePhase = (
     <>
       <div className="flex-grow flex justify-center items-end">
-        <Row items={cards.enemies} renderItem={(id) => <Item card={cardMap[id]} />} />
+        <Row items={cards.enemies} renderItem={(id) => <Card card={cardMap[id]} />} />
       </div>
 
       <div className="flex-grow">
-        <Row items={cards.hand} renderItem={(id) => <Item card={cardMap[id]} />} highlight />
+        <Row items={cards.hand} renderItem={(id) => <Card card={cardMap[id]} />} highlight />
       </div>
     </>
   )
