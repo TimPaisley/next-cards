@@ -11,9 +11,9 @@ import Header from './Header'
 import Row from './Row'
 
 export default function Game() {
-  const initialEnemies = randomCards(2, { minRarity: 2, maxRarity: 3 })
-  const initialDeck = randomCards(4, { minRarity: 1, maxRarity: 1 })
-  const initialHand = randomCards(4, { minRarity: 1, maxRarity: 1 })
+  const initialEnemies = randomCards(2, { minRarity: 1, maxRarity: 6 })
+  const initialDeck = randomCards(4, { minRarity: 1, maxRarity: 6 })
+  const initialHand = randomCards(4, { minRarity: 1, maxRarity: 6 })
 
   const cardIds = (cards) => cards.map((c) => c.id)
 
@@ -54,9 +54,9 @@ export default function Game() {
   }
 
   const resetGame = () => {
-    const newEnemies = randomCards(2, { minRarity: 2, maxRarity: 3 })
-    const newDeck = randomCards(4, { minRarity: 1, maxRarity: 1 })
-    const newHand = randomCards(4, { minRarity: 1, maxRarity: 1 })
+    const newEnemies = randomCards(2, { minRarity: 1, maxRarity: 6 })
+    const newDeck = randomCards(4, { minRarity: 1, maxRarity: 6 })
+    const newHand = randomCards(4, { minRarity: 1, maxRarity: 6 })
 
     setCards({
       enemies: cardIds(newEnemies),
