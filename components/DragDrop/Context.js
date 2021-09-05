@@ -2,7 +2,7 @@ import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import { useState } from 'react'
 
-export default function Context({ children, id, items, setItems, setActive }) {
+export default function Context({ children, id, items, setItems, setItemsDragEnd, setActive }) {
   const [clonedItems, setClonedItems] = useState()
 
   const sensors = useSensors(
@@ -131,7 +131,7 @@ export default function Context({ children, id, items, setItems, setActive }) {
       const overIndex = items[overContainer].indexOf(overId)
 
       if (activeIndex !== overIndex) {
-        setItems((items) => ({
+        setItemsDragEnd((items) => ({
           ...items,
           [overContainer]: arrayMove(items[overContainer], activeIndex, overIndex)
         }))

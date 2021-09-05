@@ -1,7 +1,7 @@
 import { DragOverlay } from '@dnd-kit/core'
 import { useEffect, useState } from 'react'
 
-import { fight, randomCards } from '../lib/cards'
+import { fight, getCardById, randomCards } from '../lib/cards'
 import Card from './Card'
 import Controls from './Controls'
 import Discard from './Discard'
@@ -43,6 +43,28 @@ export default function Game() {
   useEffect(() => {
     setWinReady(true)
   }, [])
+
+  const setCardsDragEnd = (result) => {
+    const newCards = result(cards)
+    const newHand = newCards.hand.map((c) => cardMap[c])
+
+    // Evolve any consecutive pairs
+    for (var i = 0; i < newHand.length - 1; i++) {
+      const currentCard = newHand[i]
+      const nextCard = newHand[i + 1]
+
+      if (currentCard.pid === nextCard.pid && currentCard.evolvesInto !== null) {
+        console.log('match', currentCard.name)
+
+        const evolution = getCardById(currentCard.evolvesInto)
+        newHand.splice(i, 2, evolution)
+      }
+    }
+
+    setCardMap({ ...cardMap, ...buildIdMap(newHand) })
+
+    setCards({ ...newCards, hand: cardIds(newHand) })
+  }
 
   const refreshDeck = () => {
     const newCards = randomCards(4, { minRarity: 1, maxRarity: 1 })
@@ -104,7 +126,12 @@ export default function Game() {
   }
 
   const buyPhase = (
-    <Context id="dnd-context" items={cards} setItems={setCards} setActive={setActive}>
+    <Context
+      id="dnd-context"
+      items={cards}
+      setItems={setCards}
+      setItemsDragEnd={setCardsDragEnd}
+      setActive={setActive}>
       <div className="relative flex-grow flex justify-center">
         <Row items={cards.enemies} renderItem={(id) => <Card card={cardMap[id]} />} />
         {active?.containerId === 'hand' && <Discard />}
