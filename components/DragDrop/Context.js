@@ -130,12 +130,13 @@ export default function Context({ children, id, items, setItems, setItemsDragEnd
       const activeIndex = items[activeContainer].indexOf(active.id)
       const overIndex = items[overContainer].indexOf(overId)
 
-      if (activeIndex !== overIndex) {
-        setItemsDragEnd((items) => ({
-          ...items,
-          [overContainer]: arrayMove(items[overContainer], activeIndex, overIndex)
-        }))
-      }
+      console.log('active index', activeIndex)
+      console.log('over index', overIndex)
+
+      setItemsDragEnd((items) => ({
+        ...items,
+        [overContainer]: arrayMove(items[overContainer], activeIndex, overIndex)
+      }))
     }
 
     setActive(null)
