@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 
 import { fight, getCardById, randomCards } from '../lib/cards'
 import Card from './Card'
+import CardPreview from './CardPreview'
 import Controls from './Controls'
 import Discard from './Discard'
 import Container from './DragDrop/Container'
@@ -39,6 +40,7 @@ export default function Game() {
 
   const [mana, setMana] = useState(10)
   const [isBattlePhase, setIsBattlePhase] = useState(false)
+  const [preview, setPreview] = useState()
 
   useEffect(() => {
     setWinReady(true)
@@ -125,6 +127,8 @@ export default function Game() {
     return new Promise((resolve) => setTimeout(resolve, ms))
   }
 
+  const renderCard = (id) => <Card card={cardMap[id]} setPreview={setPreview} />
+
   const buyPhase = (
     <Context
       id="dnd-context"
@@ -133,7 +137,10 @@ export default function Game() {
       setItemsDragEnd={setCardsDragEnd}
       setActive={setActive}>
       <div className="relative flex-grow flex justify-center">
-        <Row items={cards.enemies} renderItem={(id) => <Card card={cardMap[id]} />} />
+        <Row
+          items={cards.enemies}
+          renderItem={(id) => <Card card={cardMap[id]} setPreview={setPreview} />}
+        />
         {active?.containerId === 'hand' && <Discard />}
       </div>
 
@@ -147,8 +154,14 @@ export default function Game() {
       </div>
 
       <div className="flex flex-col items-center">
-        <Container id="deck" items={cards.deck} itemMap={cardMap} activeId={active?.id} />
-        <Container id="hand" items={cards.hand} itemMap={cardMap} activeId={active?.id} highlight />
+        <Container id="deck" items={cards.deck} renderItem={renderCard} activeId={active?.id} />
+        <Container
+          id="hand"
+          items={cards.hand}
+          renderItem={renderCard}
+          activeId={active?.id}
+          highlight
+        />
       </div>
       <DragOverlay>{active ? <Card card={cardMap[active.id]} /> : null}</DragOverlay>
     </Context>
@@ -157,11 +170,11 @@ export default function Game() {
   const battlePhase = (
     <>
       <div className="flex-grow flex justify-center items-end">
-        <Row items={cards.enemies} renderItem={(id) => <Card card={cardMap[id]} />} />
+        <Row items={cards.enemies} renderItem={renderCard} />
       </div>
 
       <div className="flex-grow">
-        <Row items={cards.hand} renderItem={(id) => <Card card={cardMap[id]} />} highlight />
+        <Row items={cards.hand} renderItem={renderCard} highlight />
       </div>
     </>
   )
@@ -170,6 +183,7 @@ export default function Game() {
     <>
       <Header reset={resetGame} />
       {isBattlePhase ? battlePhase : winReady && buyPhase}
+      {preview && <CardPreview card={preview} close={() => setPreview(null)} />}
     </>
   )
 }

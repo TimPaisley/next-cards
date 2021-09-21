@@ -5,7 +5,7 @@ import Row from '../Row'
 import Item from './Item'
 import { strategy } from './Strategy'
 
-export default function Container({ id, highlight = false, items, itemMap, activeId }) {
+export default function Container({ id, highlight = false, items, renderItem, activeId }) {
   const { setNodeRef } = useDroppable({ id })
 
   return (
@@ -14,7 +14,9 @@ export default function Container({ id, highlight = false, items, itemMap, activ
         <Row
           highlight={highlight}
           items={items}
-          renderItem={(id) => <Item key={id} card={itemMap[id]} isActive={id === activeId} />}
+          renderItem={(id) => (
+            <Item key={id} itemId={id} renderItem={renderItem} isActive={id === activeId} />
+          )}
         />
       </div>
     </SortableContext>

@@ -5,8 +5,14 @@ import { useState } from 'react'
 export default function Context({ children, id, items, setItems, setItemsDragEnd, setActive }) {
   const [clonedItems, setClonedItems] = useState()
 
+  const pointerActivationConstraint = {
+    activationConstraint: {
+      distance: 0
+    }
+  }
+
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, pointerActivationConstraint),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates
     })
@@ -129,9 +135,6 @@ export default function Context({ children, id, items, setItems, setItemsDragEnd
     if (activeContainer && overContainer) {
       const activeIndex = items[activeContainer].indexOf(active.id)
       const overIndex = items[overContainer].indexOf(overId)
-
-      console.log('active index', activeIndex)
-      console.log('over index', overIndex)
 
       setItemsDragEnd((items) => ({
         ...items,

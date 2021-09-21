@@ -2,10 +2,8 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import classNames from 'classnames'
 
-import Card from '../Card'
-
-export default function Item({ card, isActive }) {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: card.id })
+export default function Item({ itemId, renderItem, isActive }) {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: itemId })
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -19,7 +17,7 @@ export default function Item({ card, isActive }) {
 
   return (
     <div ref={setNodeRef} className={className} style={style} {...attributes} {...listeners}>
-      <Card card={card} />
+      {renderItem(itemId)}
     </div>
   )
 }

@@ -20,7 +20,7 @@ export default function Layout({ children }) {
         <meta name="theme-color" content="#fff" />
       </Head>
 
-      <div className="flex h-screen flex-col max-w-sm m-auto">{children}</div>
+      <div className="relative flex h-screen flex-col max-w-sm m-auto">{children}</div>
     </>
   )
 }
