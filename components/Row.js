@@ -1,8 +1,8 @@
 import classNames from 'classnames'
 
 export default function Row({ items, renderItem, highlight }) {
-  const twBase = 'py-2 pl-2 mb-4 flex justify-center space-x-2 rounded-md'
-  const twHighlight = 'bg-gray-100'
+  const twBase = 'py-2 pl-2 flex justify-center space-x-2'
+  const twHighlight = 'bg-gray-400'
 
   const className = classNames(twBase, { [twHighlight]: highlight })
 

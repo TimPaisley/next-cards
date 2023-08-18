@@ -153,7 +153,7 @@ export default function Game() {
         />
       </div>
 
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col">
         <Container id="deck" items={cards.deck} renderItem={renderCard} activeId={active?.id} />
         <Container
           id="hand"

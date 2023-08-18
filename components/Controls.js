@@ -1,32 +1,38 @@
 import { faFistRaised, faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import classNames from 'classnames'
 
 export default function Controls({ mana = 0, refresh, endTurn }) {
   return (
-    <div className="py-4 flex space-x-4 align-middle justify-center">
-      <div className="flex-1 flex items-center">
-        <button
-          onClick={endTurn}
-          className="mr-4 border border-black w-10 h-10 rounded-full flex justify-center items-center">
-          <div className="w-4">
-            <FontAwesomeIcon icon={faFistRaised} />
-          </div>
-        </button>
-      </div>
-
-      <div className="flex space-x-2">
-        <div className="flex items-center font-bold pr-4">Buy Phase</div>
-        <div className="border border-black w-10 h-10 rounded-full flex items-center justify-center font-bold">
-          {mana}
+    <div className="py-4 flex space-x-2 justify-center">
+      <ControlButton onClick={endTurn}>
+        <div className="w-4">
+          <FontAwesomeIcon icon={faFistRaised} />
         </div>
-        <button
-          onClick={refresh}
-          className="border border-black w-10 h-10 rounded-full flex justify-center items-center">
-          <div className="w-4">
-            <FontAwesomeIcon icon={faSyncAlt} />
-          </div>
-        </button>
-      </div>
+      </ControlButton>
+      <Control />
+      <Control className="flex-1">Buy Phase</Control>
+      <Control>{mana}</Control>
+      <ControlButton onClick={refresh}>
+        <div className="w-4">
+          <FontAwesomeIcon icon={faSyncAlt} />
+        </div>
+      </ControlButton>
     </div>
+  )
+}
+
+const baseClass =
+  'border-2 border-black w-10 h-10 rounded-full flex items-center justify-center font-bold'
+
+function Control({ children, className }) {
+  return <div className={classNames(baseClass, className)}>{children}</div>
+}
+
+function ControlButton({ children, className, onClick }) {
+  return (
+    <button onClick={onClick} className={classNames(baseClass, className)}>
+      {children}
+    </button>
   )
 }
