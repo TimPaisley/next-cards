@@ -136,6 +136,12 @@ export default function Game() {
       setItems={setCards}
       setItemsDragEnd={setCardsDragEnd}
       setActive={setActive}>
+      <div className="flex justify-center">
+        <img
+          className="w-60 border-2 border-black rounded-md bg-red-200"
+          src="/trainers/01-37.png"
+        />
+      </div>
       <div className="relative flex-grow flex justify-center">
         <Row
           items={cards.enemies}
