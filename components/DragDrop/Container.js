@@ -6,19 +6,15 @@ import Item from './Item'
 import { strategy } from './Strategy'
 
 export default function Container({ id, highlight = false, items, renderItem, activeId }) {
-  const { setNodeRef } = useDroppable({ id })
-
   return (
     <SortableContext id={id} items={items} strategy={strategy}>
-      <div ref={setNodeRef}>
-        <Row
-          highlight={highlight}
-          items={items}
-          renderItem={(id) => (
-            <Item key={id} itemId={id} renderItem={renderItem} isActive={id === activeId} />
-          )}
-        />
-      </div>
+      <Row
+        highlight={highlight}
+        items={items}
+        renderItem={(id) => (
+          <Item key={id} itemId={id} renderItem={renderItem} isActive={id === activeId} />
+        )}
+      />
     </SortableContext>
   )
 }

@@ -14,7 +14,7 @@ import Row from './Row'
 export default function Game() {
   const initialEnemies = randomCards(2, { minRarity: 1, maxRarity: 6 })
   const initialDeck = randomCards(4, { minRarity: 1, maxRarity: 6 })
-  const initialHand = randomCards(4, { minRarity: 1, maxRarity: 6 })
+  const initialHand = randomCards(3, { minRarity: 1, maxRarity: 6 })
 
   const cardIds = (cards) => cards.map((c) => c.id)
 
@@ -147,7 +147,6 @@ export default function Game() {
           items={cards.enemies}
           renderItem={(id) => <Card card={cardMap[id]} setPreview={setPreview} />}
         />
-        {active?.containerId === 'hand' && <Discard />}
       </div>
 
       <div className="px-4">
@@ -160,7 +159,18 @@ export default function Game() {
       </div>
 
       <div className="flex flex-col">
-        <Container id="deck" items={cards.deck} renderItem={renderCard} activeId={active?.id} />
+        {active?.containerId === 'hand' ? (
+          <div className="relative">
+            <Discard />
+            <Row
+              items={cards.deck}
+              renderItem={(id) => <Card card={cardMap[id]} setPreview={setPreview} />}
+            />
+          </div>
+        ) : (
+          <Container id="deck" items={cards.deck} renderItem={renderCard} activeId={active?.id} />
+        )}
+
         <Container
           id="hand"
           items={cards.hand}
