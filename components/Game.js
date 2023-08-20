@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import Battle from './Battle'
-import { randomCards } from '../lib/cards'
 import Field from './Field'
 import Header from './Header'
 
 export default function Game() {
   const [gameState, setGameState] = useState('field')
+  const [battleSettings, setBattleSettings] = useState(null)
 
   const resetGame = () => {
     // const newEnemies = randomCards(2, { minRarity: 1, maxRarity: 6 })
@@ -26,7 +26,8 @@ export default function Game() {
     // setIsBattlePhase(false)
   }
 
-  const startBattle = () => {
+  const startBattle = (trainer) => {
+    setBattleSettings({ trainer })
     setGameState('battle')
   }
 
@@ -36,13 +37,7 @@ export default function Game() {
 
       {gameState === 'field' && <Field startBattle={startBattle} />}
 
-      {gameState === 'battle' && (
-        <Battle
-          initialEnemies={randomCards(2, { minRarity: 1, maxRarity: 6 })}
-          initialDeck={randomCards(4, { minRarity: 1, maxRarity: 6 })}
-          initialHand={randomCards(3, { minRarity: 1, maxRarity: 6 })}
-        />
-      )}
+      {gameState === 'battle' && <Battle {...battleSettings} />}
     </>
   )
 }

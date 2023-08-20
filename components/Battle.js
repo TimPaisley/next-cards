@@ -1,7 +1,7 @@
 import { DragOverlay } from '@dnd-kit/core'
 import { useEffect, useState } from 'react'
 
-import { fight, getCardById, randomCards } from '../lib/cards'
+import { fight, getCardById, randomCards, typeToLightBackground } from '../lib/cards'
 import Card from './Card'
 import CardPreview from './CardPreview'
 import Controls from './Controls'
@@ -9,8 +9,13 @@ import Discard from './Discard'
 import Container from './DragDrop/Container'
 import Context from './DragDrop/Context'
 import Row from './Row'
+import classNames from 'classnames'
 
-export default function Battle({ initialEnemies, initialDeck, initialHand }) {
+export default function Battle({ trainer }) {
+  const initialEnemies = randomCards(2, { minRarity: 1, maxRarity: 6 })
+  const initialDeck = randomCards(4, { minRarity: 1, maxRarity: 6 })
+  const initialHand = randomCards(1, { minRarity: 1, maxRarity: 6 })
+
   const cardIds = (cards) => cards.map((c) => c.id)
 
   const [cards, setCards] = useState({
@@ -102,6 +107,8 @@ export default function Battle({ initialEnemies, initialDeck, initialHand }) {
 
   const renderCard = (id) => <Card card={cardMap[id]} setPreview={setPreview} />
 
+  const trainerBackground = typeToLightBackground[trainer.type]
+
   const buyPhase = (
     <Context
       id="dnd-context"
@@ -111,8 +118,8 @@ export default function Battle({ initialEnemies, initialDeck, initialHand }) {
       setActive={setActive}>
       <div className="flex justify-center">
         <img
-          className="w-60 border-2 border-black rounded-md bg-red-200"
-          src="/trainers/01-37.png"
+          className={classNames('w-60 border-2 border-black rounded-md', trainerBackground)}
+          src={`/trainers/${trainer.id}.png`}
         />
       </div>
       <div className="relative flex-grow flex justify-center">
