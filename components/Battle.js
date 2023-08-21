@@ -1,4 +1,5 @@
 import { DragOverlay } from '@dnd-kit/core'
+import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 
 import { fight, getCardById, idsToSet, randomCards, typeToLightBackground } from '../lib/cards'
@@ -9,7 +10,6 @@ import Discard from './Discard'
 import Container from './DragDrop/Container'
 import Context from './DragDrop/Context'
 import Row from './Row'
-import classNames from 'classnames'
 
 export default function Battle({ endBattle, trainer }) {
   const initialEnemies = trainer.party
@@ -128,6 +128,7 @@ export default function Battle({ endBattle, trainer }) {
         <img
           className={classNames('w-60 border-2 border-black rounded-md', trainerBackground)}
           src={`/trainers/${trainer.id}.png`}
+          alt=""
         />
       </div>
       <div className="relative flex-grow flex justify-center">

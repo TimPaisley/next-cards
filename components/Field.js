@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+
 import { typeToLightBackground } from '../lib/cards'
 
 export default function Field({ startBattle }) {
@@ -54,7 +55,7 @@ export default function Field({ startBattle }) {
 
     return (
       <button onClick={() => startBattle(trainer)} className={classNames(base, background)}>
-        <img src={`/trainers/${trainer.id}.png`} />
+        <img alt="" src={`/trainers/${trainer.id}.png`} />
       </button>
     )
   }
