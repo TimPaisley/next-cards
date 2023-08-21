@@ -17,13 +17,19 @@ export default function Game() {
     setGameState('battle')
   }
 
+  const endBattle = (result) => {
+    setGameState('field')
+    setBattleSettings(null)
+    console.log('Battle results', result)
+  }
+
   return (
     <>
       <Header reset={resetGame} />
 
       {gameState === 'field' && <Field startBattle={startBattle} />}
 
-      {gameState === 'battle' && <Battle {...battleSettings} />}
+      {gameState === 'battle' && <Battle endBattle={endBattle} {...battleSettings} />}
     </>
   )
 }

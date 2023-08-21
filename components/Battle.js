@@ -11,7 +11,7 @@ import Context from './DragDrop/Context'
 import Row from './Row'
 import classNames from 'classnames'
 
-export default function Battle({ trainer }) {
+export default function Battle({ endBattle, trainer }) {
   const initialEnemies = trainer.party
     ? idsToSet(trainer.party)
     : randomCards(2, {
@@ -90,8 +90,9 @@ export default function Battle({ trainer }) {
       cards.hand.map((id) => cardMap[id]),
       cards.enemies.map((id) => cardMap[id])
     )
+
     await stepThroughBattle(result.battle)
-    console.log('Battle results', result)
+    endBattle(result)
   }
 
   const stepThroughBattle = async (battle) => {
