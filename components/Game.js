@@ -8,22 +8,8 @@ export default function Game() {
   const [battleSettings, setBattleSettings] = useState(null)
 
   const resetGame = () => {
-    // const newEnemies = randomCards(2, { minRarity: 1, maxRarity: 6 })
-    // const newDeck = randomCards(4, { minRarity: 1, maxRarity: 6 })
-    // const newHand = randomCards(4, { minRarity: 1, maxRarity: 6 })
-    // setCards({
-    //   enemies: cardIds(newEnemies),
-    //   deck: cardIds(newDeck),
-    //   hand: cardIds(newHand),
-    //   void: []
-    // })
-    // setCardMap({
-    //   ...buildIdMap(newEnemies),
-    //   ...buildIdMap(newDeck),
-    //   ...buildIdMap(newHand)
-    // })
-    // setMana(10)
-    // setIsBattlePhase(false)
+    setGameState('field')
+    setBattleSettings(null)
   }
 
   const startBattle = (trainer) => {

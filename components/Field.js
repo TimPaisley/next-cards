@@ -6,32 +6,45 @@ export default function Field({ startBattle }) {
     {
       id: '01-13',
       name: 'Youngster Joey',
-      type: 'normal'
+      type: 'normal',
+      minRarity: 1,
+      maxRarity: 2
     },
     {
       id: '01-14',
       name: 'Bug-catcher Lewis',
-      type: 'bug'
+      type: 'bug',
+      minRarity: 1,
+      maxRarity: 3
     },
     {
       id: '01-19',
       name: 'Swimmer Melissa',
-      type: 'water'
+      type: 'water',
+      minRarity: 1,
+      maxRarity: 4
     },
     {
       id: '01-31',
       name: 'Lady Penelope',
-      type: 'grass'
+      type: 'grass',
+      minRarity: 1,
+      maxRarity: 4
     },
     {
       id: '01-27',
       name: 'Blacksmith Harry',
-      type: 'fire'
+      type: 'fire',
+      minRarity: 1,
+      maxRarity: 4
     },
     {
       id: '02-03',
       name: 'Captain Engleworth',
-      type: 'dragon'
+      type: 'dragon',
+      party: [148, 149, 148],
+      minRarity: 4,
+      maxRarity: 6
     }
   ]
 

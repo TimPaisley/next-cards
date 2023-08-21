@@ -1,7 +1,7 @@
 import { DragOverlay } from '@dnd-kit/core'
 import { useEffect, useState } from 'react'
 
-import { fight, getCardById, randomCards, typeToLightBackground } from '../lib/cards'
+import { fight, getCardById, idsToSet, randomCards, typeToLightBackground } from '../lib/cards'
 import Card from './Card'
 import CardPreview from './CardPreview'
 import Controls from './Controls'
@@ -12,9 +12,16 @@ import Row from './Row'
 import classNames from 'classnames'
 
 export default function Battle({ trainer }) {
-  const initialEnemies = randomCards(2, { minRarity: 1, maxRarity: 6 })
-  const initialDeck = randomCards(4, { minRarity: 1, maxRarity: 6 })
-  const initialHand = randomCards(1, { minRarity: 1, maxRarity: 6 })
+  const initialEnemies = trainer.party
+    ? idsToSet(trainer.party)
+    : randomCards(2, {
+        minRarity: trainer.minRarity,
+        maxRarity: trainer.maxRarity,
+        type: trainer.type
+      })
+
+  const initialDeck = randomCards(4, { minRarity: trainer.minRarity, maxRarity: trainer.maxRarity })
+  const initialHand = randomCards(1, { minRarity: trainer.minRarity, maxRarity: trainer.maxRarity })
 
   const cardIds = (cards) => cards.map((c) => c.id)
 
@@ -69,7 +76,7 @@ export default function Battle({ trainer }) {
   }
 
   const refreshDeck = () => {
-    const newCards = randomCards(4, { minRarity: 1, maxRarity: 1 })
+    const newCards = randomCards(4, { minRarity: trainer.minRarity, maxRarity: trainer.maxRarity })
     const newIds = newCards.map((c) => c.id)
 
     setCardMap({ ...cardMap, ...buildIdMap(newCards) })
